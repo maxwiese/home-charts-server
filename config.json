@@ -1,0 +1,5 @@
+{
+    "db": {
+        "url": "mongodb:raspberrypi:27017"
+    }
+}
