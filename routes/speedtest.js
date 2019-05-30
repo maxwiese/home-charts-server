@@ -7,7 +7,7 @@ var config = require('../config')
 /* GET home page. */
 router.get('/', function(req, res, next) {
     console.log(config.db.url)
-    MongoClient.connect("mongodb://raspberrypi:27017/", function(err, db) {
+    MongoClient.connect("mongodb://raspberrypi:27017/", function(err, connection) {
         
         if (err) {
             res.status(503).json({
@@ -17,17 +17,19 @@ router.get('/', function(req, res, next) {
             //db.close()        
         }
 
-        db.db('speedtest').collection('speedtest').find().toArray((err, result) => {
+        var db = connection.db('speedtest')
+
+        db.collection('speedtest').find().toArray((err, result) => {
             if (err) {
                 res.status(503).json({
                     internal_server_error: "find data",
                     reason: err
                 }) 
-                //db.close()       
+                db.close()       
             }
 
             res.status(200).json({data: result})
-            //db.close()  
+            db.close()  
         })       
 
 
